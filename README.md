@@ -2,6 +2,9 @@
 
 Display progress bars in Go
 
+    $ go run main.go
+    Inline Progress Bar:   7% [=====>------------------------------------------------------] 309ms
+
 Example usage:
 
 package main
