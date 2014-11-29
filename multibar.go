@@ -27,8 +27,9 @@ type ProgressBar struct {
 func New(total int) (*ProgressBar, error) {
 	// can swallow err because sensible defaults are returned
 	width, _, _ := curse.GetScreenDimensions()
+
 	bar := &ProgressBar{
-		Width:           width * 3 / 4,
+		Width:           width * 3 / 5,
 		Total:           total,
 		LeftEnd:         '[',
 		RightEnd:        ']',
