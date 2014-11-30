@@ -60,7 +60,6 @@ func (b *BarContainer) Listen() {
 
 func (b *BarContainer) MakeBar(total int, prepend string) progressFunc {
 	// can swallow err because sensible defaults are returned
-	fmt.Println("\n")
 	width, _, _ := curse.GetScreenDimensions()
 	ch := make(chan int)
 	bar := &ProgressBar{
@@ -79,7 +78,10 @@ func (b *BarContainer) MakeBar(total int, prepend string) progressFunc {
 	}
 
 	b.Bars = append(b.Bars, bar)
-	bar.Display()
+	_, line, _ := curse.GetCursorPosition()
+	bar.Line = line
+	bar.Update(0)
+	fmt.Println()
 	return func(progress int) { bar.progressChan <- progress }
 }
 
@@ -87,12 +89,6 @@ func (p *ProgressBar) AddPrepend(str string) {
 	width, _, _ := curse.GetScreenDimensions()
 	p.Prepend = str
 	p.Width = (width - len(str)) * 3 / 5
-}
-
-func (p *ProgressBar) Display() {
-	_, line, _ := curse.GetCursorPosition()
-	p.Line = line
-	p.Update(0)
 }
 
 func (p *ProgressBar) Update(progress int) {
@@ -138,7 +134,7 @@ func (p *ProgressBar) Update(progress int) {
 	c := &curse.Cursor{}
 	c.Move(1, p.Line)
 	c.EraseCurrentLine()
-	fmt.Printf("\r%s%s%c%s%c%s", p.Prepend, percent, p.LeftEnd, strings.Join(bar, ""), p.RightEnd, timeElapsed)
+	fmt.Printf("\r%s %s%c%s%c%s", p.Prepend, percent, p.LeftEnd, strings.Join(bar, ""), p.RightEnd, timeElapsed)
 	c.Move(currentRow, currentLine)
 }
 
