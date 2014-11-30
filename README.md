@@ -4,11 +4,11 @@ Display progress bars in Go
 
     $ go run main.go
     here we have a progress bar
+
     some work  30% [====================>-------------------------------------------] 925ms
     and here we have another progress bar
-    here we have a longer prepend string  25% [============>-----------------------------------] 911ms
-    and a third
-    working...  19% [=============>--------------------------------------------------] 911ms
+    here we have a longer prepend string  25% [==========>--------------------------] 911ms
+    working...  19% [=============>-------------------------------------------------] 911ms
 
 Example usage:
 
