@@ -12,7 +12,7 @@ Display progress bars in Go
 
 Example usage:
 
-'''go
+```go
     package main
 
     import (
@@ -118,4 +118,4 @@ Example usage:
         // continue doing other work
         fmt.Println("All Bars Complete")
     }
-'''
+```
