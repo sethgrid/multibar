@@ -63,7 +63,7 @@ func (b *BarContainer) MakeBar(total int, prepend string) progressFunc {
 	width, _, _ := curse.GetScreenDimensions()
 	ch := make(chan int)
 	bar := &ProgressBar{
-		Width:           (width - len(prepend)) * 3 / 5,
+		Width:           width - len(prepend) - 20,
 		Total:           total,
 		Prepend:         prepend,
 		LeftEnd:         '[',
@@ -82,6 +82,7 @@ func (b *BarContainer) MakeBar(total int, prepend string) progressFunc {
 	bar.Line = line
 	bar.Update(0)
 	fmt.Println()
+
 	return func(progress int) { bar.progressChan <- progress }
 }
 
