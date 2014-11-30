@@ -2,6 +2,7 @@ package multibar
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -9,6 +10,12 @@ import (
 
 	"github.com/sethgrid/curse"
 )
+
+type progressFunc func(progress int)
+
+type BarContainer struct {
+	Bars []*ProgressBar
+}
 
 type ProgressBar struct {
 	Width           int
@@ -21,16 +28,45 @@ type ProgressBar struct {
 	ShowPercent     bool
 	ShowTimeElapsed bool
 	StartTime       time.Time
-	prepend         string
+	Line            int
+	Prepend         string
+	progressChan    chan int
 }
 
-func New(total int) (*ProgressBar, error) {
-	// can swallow err because sensible defaults are returned
-	width, _, _ := curse.GetScreenDimensions()
+func New() (*BarContainer, error) {
+	return &BarContainer{}, nil
+}
 
+func (b *BarContainer) Listen() {
+	cases := make([]reflect.SelectCase, len(b.Bars))
+	for i, bar := range b.Bars {
+		cases[i] = reflect.SelectCase{Dir: reflect.SelectRecv, Chan: reflect.ValueOf(bar.progressChan)}
+	}
+
+	remaining := len(cases)
+	for remaining > 0 {
+		chosen, value, ok := reflect.Select(cases)
+		if !ok {
+			// The chosen channel has been closed, so zero out the channel to disable the case
+			cases[chosen].Chan = reflect.ValueOf(nil)
+			remaining -= 1
+			continue
+		}
+
+		b.Bars[chosen].Update(int(value.Int()))
+	}
+	fmt.Println()
+}
+
+func (b *BarContainer) MakeBar(total int, prepend string) progressFunc {
+	// can swallow err because sensible defaults are returned
+	fmt.Println("\n")
+	width, _, _ := curse.GetScreenDimensions()
+	ch := make(chan int)
 	bar := &ProgressBar{
-		Width:           width * 3 / 5,
+		Width:           (width - len(prepend)) * 3 / 5,
 		Total:           total,
+		Prepend:         prepend,
 		LeftEnd:         '[',
 		RightEnd:        ']',
 		Fill:            '=',
@@ -39,20 +75,27 @@ func New(total int) (*ProgressBar, error) {
 		ShowPercent:     true,
 		ShowTimeElapsed: true,
 		StartTime:       time.Now(),
+		progressChan:    ch,
 	}
-	return bar, nil
+
+	b.Bars = append(b.Bars, bar)
+	bar.Display()
+	return func(progress int) { bar.progressChan <- progress }
 }
 
-func (p *ProgressBar) Prepend(str string) {
-	p.prepend = str
+func (p *ProgressBar) AddPrepend(str string) {
+	width, _, _ := curse.GetScreenDimensions()
+	p.Prepend = str
+	p.Width = (width - len(str)) * 3 / 5
 }
 
-func (p *ProgressBar) Display(progress int) {
-	/*
-	   notes:
-	   consider a prepend string
-	   handle show time and percent
-	*/
+func (p *ProgressBar) Display() {
+	_, line, _ := curse.GetCursorPosition()
+	p.Line = line
+	p.Update(0)
+}
+
+func (p *ProgressBar) Update(progress int) {
 	bar := make([]string, p.Width)
 
 	// avoid division by zero errors on non-properly constructed progressbars
@@ -91,9 +134,12 @@ func (p *ProgressBar) Display(progress int) {
 	if p.ShowTimeElapsed {
 		timeElapsed = " " + prettyTime(time.Since(p.StartTime))
 	}
+	currentRow, currentLine, _ := curse.GetCursorPosition()
 	c := &curse.Cursor{}
+	c.Move(1, p.Line)
 	c.EraseCurrentLine()
-	fmt.Printf("\r%s%s%c%s%c%s", p.prepend, percent, p.LeftEnd, strings.Join(bar, ""), p.RightEnd, timeElapsed)
+	fmt.Printf("\r%s%s%c%s%c%s", p.Prepend, percent, p.LeftEnd, strings.Join(bar, ""), p.RightEnd, timeElapsed)
+	c.Move(currentRow, currentLine)
 }
 
 func prettyTime(t time.Duration) string {
