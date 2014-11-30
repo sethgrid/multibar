@@ -48,10 +48,17 @@ func New() (*BarContainer, error) {
 	_, line, _ := curse.GetCursorPosition()
 
 	history := make(map[int]string)
-	return &BarContainer{screenWidth: width, screenLines: lines, startingLine: line, history: history}, nil
+
+	b := &BarContainer{screenWidth: width, screenLines: lines, startingLine: line, history: history}
+	go b.Listen()
+	return b, nil
 }
 
 func (b *BarContainer) Listen() {
+	for len(b.Bars) == 0 {
+		// wait until we have some bars to work with
+		time.Sleep(time.Millisecond * 100)
+	}
 	cases := make([]reflect.SelectCase, len(b.Bars))
 	for i, bar := range b.Bars {
 		cases[i] = reflect.SelectCase{Dir: reflect.SelectRecv, Chan: reflect.ValueOf(bar.progressChan)}

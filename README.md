@@ -28,7 +28,7 @@ Example usage:
         // this allows our bars to work together without stomping on one another
         progressBars, _ := multibar.New()
 
-        // some arbitrary totals for our three progress bars
+        // some arbitrary totals for our  progress bars
         // in practice, these could be file sizes or similar
         mediumTotal, smallTotal, largerTotal := 150, 100, 200
 
@@ -38,6 +38,7 @@ Example usage:
         progressBars.Println("It is best to use the print wrappers to keep output synced up.")
         progressBars.Println("We can switch back to normal fmt after our progress bars are done.\n")
 
+        // we will update the progress down below in the mock work section with barProgress1(int)
         barProgress1 := progressBars.MakeBar(mediumTotal, "1st")
 
         progressBars.Println()
@@ -51,10 +52,6 @@ Example usage:
 
         progressBars.Println("And we can have blocks of text as we wait for progress bars to complete...")
 
-        // *** We have to listen for changes ***
-        // spawn the listener that will allow the progres bars to update
-        // I should be able to move this into the New() method
-        go progressBars.Listen()
 
         /*
 
