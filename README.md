@@ -70,6 +70,9 @@ has options that you can change to fit your needs. Here are the defaults:
 
         progressBars.Println("And we can have blocks of text as we wait for progress bars to complete...")
 
+        // listen in for changes on the progress bars
+        // I should be able to move this into the constructor at some point
+        go progressBars.Listen()
 
         /*
 

@@ -51,7 +51,10 @@ func New() (*BarContainer, error) {
 	history := make(map[int]string)
 
 	b := &BarContainer{screenWidth: width, screenLines: lines, startingLine: line, history: history}
-	go b.Listen()
+	// todo: need to figure out a way to deal with additional progressbars while the listener
+	// is listening. for the time being, the calling app will have to call listen after
+	// all bars are declared
+	//go b.Listen()
 	return b, nil
 }
 
