@@ -39,11 +39,12 @@ type ProgressBar struct {
 	StartTime       time.Time
 	Line            int
 	Prepend         string
-	progressChan    chan int
+
+	progressChan chan int
 }
 
 func New() (*BarContainer, error) {
-	// can swallow err because sensible defaults are returned
+	// can swallow err because sensible defaults are returned from curse
 	width, lines, _ := curse.GetScreenDimensions()
 	_, line, _ := curse.GetCursorPosition()
 

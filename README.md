@@ -2,7 +2,7 @@
 
 Display progress bars in Go
 
-    $ go run main.go
+    $ go run main.go; stty -raw # changing terminal mode until bug fix in sethgrid/curse
     here we have a progress bar
 
     some work  30% [====================>-------------------------------------------] 925ms
@@ -10,7 +10,25 @@ Display progress bars in Go
     here we have a longer prepend string  25% [==========>--------------------------] 911ms
     working...  19% [=============>-------------------------------------------------] 911ms
 
-Example usage:
+
+### Display Options:
+
+When you call ```.MakeBar(total int, prepend string)```, the returned progress bar
+has options that you can change to fit your needs. Here are the defaults:
+
+    - Width:           screen width - len(prepend) - 20
+    - Total:           total (passed in)
+    - Prepend:         prepend (passed in)
+    - LeftEnd:         '['
+    - RightEnd:        ']'
+    - Fill:            '='
+    - Head:            '>'
+    - Empty:           '-'
+    - ShowPercent:     true
+    - ShowTimeElapsed: true
+
+
+### Example usage:
 
 ```go
     package main
