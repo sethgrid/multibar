@@ -30,6 +30,8 @@ has options that you can change to fit your needs. Here are the defaults:
 
 ### Example usage:
 
+![example gif](http://share.gifyoutube.com/m2oE5J.gif)
+
 ```go
     package main
 
