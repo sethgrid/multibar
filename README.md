@@ -2,7 +2,7 @@
 
 Display progress bars in Go
 
-    $ go run main.go; stty -raw # changing terminal mode until bug fix in sethgrid/curse
+    $ go run main.go
     here we have a progress bar
 
     some work  30% [====================>-------------------------------------------] 925ms
@@ -31,6 +31,8 @@ has options that you can change to fit your needs. Here are the defaults:
 ### Example usage:
 
 ![example gif](http://share.gifyoutube.com/m2oE5J.gif)
+
+(note, in the example gif, we are manually resetting the terminal mode. We NO LONGER have to, issue fixed)
 
 ```go
     package main

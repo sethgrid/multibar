@@ -155,7 +155,6 @@ func (p *ProgressBar) Update(progress int) {
 
 	// record where we are, jump to the progress bar, update it, jump back
 	c, _ := curse.New()
-	curse.SetCookedMode() // attempting to get around curse bug
 	c.Move(1, p.Line)
 	c.EraseCurrentLine()
 	fmt.Printf("\r%s %s%c%s%c%s", p.Prepend, percent, p.LeftEnd, strings.Join(bar, ""), p.RightEnd, timeElapsed)
@@ -190,7 +189,6 @@ func (b *BarContainer) addedNewlines(count int) {
 
 func (b *BarContainer) redrawAll(moveUp int) {
 	c, _ := curse.New()
-	curse.SetCookedMode() // attempting to get around curse bug
 
 	newHistory := make(map[int]string)
 	for line, printed := range b.history {
