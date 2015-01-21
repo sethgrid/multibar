@@ -12,7 +12,7 @@ import (
 	"github.com/sethgrid/curse"
 )
 
-type progressFunc func(progress int)
+type ProgressFunc func(progress int)
 
 type BarContainer struct {
 	Bars []*ProgressBar
@@ -83,7 +83,7 @@ func (b *BarContainer) Listen() {
 	b.Println()
 }
 
-func (b *BarContainer) MakeBar(total int, prepend string) progressFunc {
+func (b *BarContainer) MakeBar(total int, prepend string) ProgressFunc {
 	ch := make(chan int)
 	bar := &ProgressBar{
 		Width:           b.screenWidth - len(prepend) - 20,
