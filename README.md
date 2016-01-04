@@ -141,3 +141,7 @@ has options that you can change to fit your needs. Here are the defaults:
         fmt.Println("All Bars Complete")
     }
 ```
+
+### License
+
+See LICENSE.md
