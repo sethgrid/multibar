@@ -34,6 +34,8 @@ has options that you can change to fit your needs. Here are the defaults:
 
 (note, in the example gif, we are manually resetting the terminal mode. We NO LONGER have to, issue fixed)
 
+You can run this with `cd demo; go run main.go`.
+
 ```go
     package main
 
@@ -141,6 +143,11 @@ has options that you can change to fit your needs. Here are the defaults:
         fmt.Println("All Bars Complete")
     }
 ```
+
+### Idiosyncrasies
+
+When you run tests, a lot of terminal cursor movement happens. This will cause the output to look all kinds of messed up.
+In most unix systems, `clear` or `cmd+k` should clear out the output.
 
 ### License
 
