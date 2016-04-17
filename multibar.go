@@ -17,10 +17,11 @@ type ProgressFunc func(progress int)
 type BarContainer struct {
 	Bars []*ProgressBar
 
-	screenLines   int
-	screenWidth   int
-	startingLine  int
-	totalNewlines int
+	screenLines             int
+	screenWidth             int
+	startingLine            int
+	totalNewlines           int
+	historicNewlinesCounter int
 
 	history map[int]string
 	sync.Mutex
@@ -175,6 +176,7 @@ func prettyTime(t time.Duration) string {
 
 func (b *BarContainer) addedNewlines(count int) {
 	b.totalNewlines += count
+	b.historicNewlinesCounter += count
 
 	// if we hit the bottom of the screen, we "scroll" our bar displays by pushing
 	// them up count lines (closer to line 0)

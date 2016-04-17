@@ -12,8 +12,8 @@ func TestNewLineDetection_EmptyPrintln(t *testing.T) {
 	expected := 1
 	resetLines(expected)
 
-	if bc.totalNewlines != expected {
-		t.Errorf("empty Println - got %d, want %d newline", bc.totalNewlines, expected)
+	if bc.historicNewlinesCounter != expected {
+		t.Errorf("empty Println - got %d, want %d newline", bc.historicNewlinesCounter, expected)
 	}
 }
 
@@ -23,8 +23,8 @@ func TestNewLineDetection_Println(t *testing.T) {
 	expected := 3
 	resetLines(expected)
 
-	if bc.totalNewlines != expected {
-		t.Errorf("Println - got %d, want %d newline", bc.totalNewlines, expected)
+	if bc.historicNewlinesCounter != expected {
+		t.Errorf("Println - got %d, want %d newline", bc.historicNewlinesCounter, expected)
 	}
 }
 
@@ -34,8 +34,8 @@ func TestNewLineDetection_Printf(t *testing.T) {
 	expected := 4
 	resetLines(expected)
 
-	if bc.totalNewlines != expected {
-		t.Errorf("Printf - got %d, want %d newline", bc.totalNewlines, expected)
+	if bc.historicNewlinesCounter != expected {
+		t.Errorf("Printf - got %d, want %d newline", bc.historicNewlinesCounter, expected)
 	}
 }
 
@@ -45,8 +45,8 @@ func TestNewLineDetection_Print(t *testing.T) {
 	expected := 4
 	resetLines(expected)
 
-	if bc.totalNewlines != expected {
-		t.Errorf("Print - got %d, want %d newline", bc.totalNewlines, expected)
+	if bc.historicNewlinesCounter != expected {
+		t.Errorf("Print - got %d, want %d newline", bc.historicNewlinesCounter, expected)
 	}
 }
 
@@ -57,8 +57,8 @@ func TestNewLineDetection_ManyPrints(t *testing.T) {
 	expected := 5
 	resetLines(expected)
 
-	if bc.totalNewlines != expected {
-		t.Errorf("Print - got %d, want %d newline", bc.totalNewlines, expected)
+	if bc.historicNewlinesCounter != expected {
+		t.Errorf("Print - got %d, want %d newline", bc.historicNewlinesCounter, expected)
 	}
 }
 
